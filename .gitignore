@@ -1,2 +1,4 @@
 *.pem
 *.pth
+
+IF/output_folder/
