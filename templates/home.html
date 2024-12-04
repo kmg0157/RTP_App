@@ -20,25 +20,52 @@
             </button>
         </div>
 
-        <!-- 추적 버튼 -->
+        <!-- 하단 버튼 -->
         <button class="tracking_button">
             <img class="vector" src="./img/path_icon.png" alt="Tracking Icon">
         </button>
 
         <!-- 경로 컨테이너 -->
         <div class="path_container">
+            <!-- 헤더 -->
             <div class="header">
                 <div class="title">경로측정</div>
                 <button class="close_button">
                     <img class="vector" src="./img/close_icon.png" alt="Close Button">
                 </button>
             </div>
-            <!-- 추가적인 경로 정보가 여기에 표시됩니다. -->
+            <!-- 사용자 컴포넌트 -->
+            <div class="user_container">
+                <div class="user-profile">
+                    <div class="ellipse"></div>
+                    <div class="user-name">김철수</div>
+                    <button class="status-button">시작</button>
+                </div>
+            
+                <div class="user-profile">
+                    <div class="ellipse"></div>
+                    <div class="user-name">김철수</div>
+                    <button class="status-button">시작</button>
+                </div>
+            
+                <div class="user-profile">
+                    <div class="ellipse"></div>
+                    <div class="user-name">김철수</div>
+                    <button class="status-button">시작</button>
+                </div>
+            
+                <div class="user-profile">
+                    <div class="ellipse"></div>
+                    <div class="user-name">김철수</div>
+                    <button class="status-button">시작</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         // 카카오맵 초기화
+        
         function initMap() {
             const container = document.getElementById('map'); // 지도를 표시할 div
             const options = {
@@ -47,7 +74,11 @@
             };
 
             const map = new kakao.maps.Map(container, options); // 지도 생성
+            // 지도 크기 설정 (화면 크기에 맞추기)
+            container.style.width = "100%";
+            container.style.height = "100vh";  // 높이를 화면 크기에 맞게 설정
         }
+        
 
         // 페이지 로드 후 맵 초기화
         window.onload = initMap;
