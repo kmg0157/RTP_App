@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATROL - 회원가입</title>
+    <!-- CSS 파일 연결 -->
+    <link rel="stylesheet" href="/static/css/register.css">
+</head>
+<body>
+    <div class="container">
+        <h1>PATROL</h1>
+        <p class="subtitle">Demo</p>
+        <form id="registerForm">
+            <div class="input-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="id">ID</label>
+                <input type="text" id="id" name="id" required>
+            </div>
+            <div class="input-group">
+                <label for="pw">PW</label>
+                <input type="password" id="passwd" name="passwd" required>
+            </div>
+            <div class="input-group">
+                <label for="phone">연락처</label>
+                <input type="tel" id="user_tel" name="user_tel" required>
+            </div>
+            <div class="input-group">
+                <label for="guardian_name">피보호자 이름</label>
+                <input type="text" id="target_name" name="target_name" required>
+            </div>
+            <div class="input-group">
+                <label for="guardian_phone">피보호자 연락처</label>
+                <input type="tel" id="target_tel" name="target_tel" required>
+            </div>
+            <button type="submit" class="btn">회원가입 완료</button>
+        </form>
+        <div class="message" id="message"></div>
+        <footer>Pattern Analysis & Tracking for Route Oversight & Location</footer>
+    </div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                name: document.getElementById('name').value,
+                id: document.getElementById('id').value,
+                passwd: document.getElementById('passwd').value,
+                user_tel: document.getElementById('user_tel').value,
+                target_name: document.getElementById('target_name').value,
+                target_tel: document.getElementById('target_tel').value
+            };
+
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                const result = await response.json();
+
+                const messageElement = document.getElementById('message');
+                if (result.success) {
+                    messageElement.style.color = 'lightgreen';
+                    messageElement.textContent = '회원가입 성공!';
+                } else {
+                    messageElement.style.color = 'red';
+                    messageElement.textContent = `오류: ${result.message}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

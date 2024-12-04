@@ -18,8 +18,12 @@ class GPSApp:
     def setup_routes(self):
         """Flask 라우트 정의"""
         @self.app.route('/')
+        def genesis():
+            return render_template('register.html')  # 클라이언트에 HTML 파일 제공
+        
+        @self.app.route('/index')
         def home():
-            return render_template('index.html')  # 클라이언트에 HTML 파일 제공
+            return render_template('index.html')
 
         @self.app.route('/gps', methods=['POST'])
         def receive_gps():
@@ -29,38 +33,34 @@ class GPSApp:
             print(f"Received GPS coordinates: Latitude={latitude}, Longitude={longitude}")
             return jsonify({'status': 'success', 'latitude': latitude, 'longitude': longitude})
         
-        @self.app.route('/register/',  methods=['POST'])
+        @self.app.route('/register',  methods=['POST'])
         def registration():
             data = request.json
             id = data.get('id')
             passwd = data.get('passwd')
             name=data.get('name')
             user_tel=data.get('user_tel')
-            target=data.get('target')
+            target_name=data.get('target_name')
             target_tel=data.get('target_tel')
-
-            # 입력 검증
-            if not id or not passwd:
-                return jsonify({"error": "아이디 패스워드를 확인하시오."}), 400
 
             # 비밀번호 해싱
             password_hash = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
 
             # 사용자 추가
-            if register(id, password_hash, name, user_tel, target,target_tel):
+            if register(id, password_hash, name, user_tel, target_name,target_tel):
                 return jsonify({"message": "회원가입 성공"
                                 , "id":{id}
                                 , "password_hash":{password_hash}
                                 , "name":{name}
                                 , "user_tel":{user_tel}
-                                , "target":{target}
+                                , "target":{target_name}
                                 , "target_tel":{target_tel}
-                                }), 201
+                                , "redirect_url": "/index"}), 201
             else:
                 return jsonify({"error": "회원가입 실패"}), 500  
             
                 
-        @self.app.route('/login/', methods=['POST'])
+        @self.app.route('/login', methods=['POST'])
         def login():
             data = request.json
             id = data.get('id')
@@ -73,7 +73,8 @@ class GPSApp:
             # 사용자 인증 로직
             User=id_check(id)
             if User and bcrypt.checkpw(passwd.encode('utf-8'), User.password_hash.encode('utf-8')):
-                return jsonify({"message": "로그인 성공"}), 200
+                #return jsonify({"message": "로그인 성공"}), 200
+                return render_template('index.html')
             else:
                 return jsonify({"error": "아이디와 패스워드를 확인하시오."}), 401
 
@@ -81,7 +82,7 @@ class GPSApp:
 
     def run(self, host='0.0.0.0', port=5000, debug=True):
         """Flask 서버 실행"""
-        self.app.run(host=host, port=port, debug=debug, ssl_context=('cert.pem', 'key.pem'))
+        self.app.run(host=host, port=port, debug=debug)#, ssl_context=('cert.pem', 'key.pem'))
 
 
 # 애플리케이션 실행
