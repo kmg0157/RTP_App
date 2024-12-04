@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Application</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf43b10f230c6b1968a9f19cb8ca7a8b"></script>
+</head>
+<body>
+    <!-- 메인 화면 -->
+    <div id="main-screen">
+        <!-- 지도 영역 -->
+        <div id="map"></div>
+        
+        <!-- 검색바 -->
+        <div id="search-bar">
+            <button id="menu-icon">
+                <img class="vector" src="./img/menu_icon.png" alt="Menu Icon" />
+            </button>
+        </div>
+
+        <!-- 추적 버튼 -->
+        <button class="tracking_button">
+            <img class="vector" src="./img/path_icon.png" alt="Tracking Icon">
+        </button>
+
+        <!-- 경로 컨테이너 -->
+        <div class="path_container">
+            <div class="header">
+                <div class="title">경로측정</div>
+                <button class="close_button">
+                    <img class="vector" src="./img/close_icon.png" alt="Close Button">
+                </button>
+            </div>
+            <!-- 추가적인 경로 정보가 여기에 표시됩니다. -->
+        </div>
+    </div>
+
+    <script>
+        // 카카오맵 초기화
+        function initMap() {
+            const container = document.getElementById('map'); // 지도를 표시할 div
+            const options = {
+                center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울 중심 좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+            const map = new kakao.maps.Map(container, options); // 지도 생성
+        }
+
+        // 페이지 로드 후 맵 초기화
+        window.onload = initMap;
+    </script>
+</body>
+</html>
