@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Application</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=cf43b10f230c6b1968a9f19cb8ca7a8b"></script>
+</head>
+<body>
+    <!-- 메인 화면 -->
+    <div id="main-screen">
+        <!-- 지도 영역 -->
+        <div id="map"></div>
+        
+        <!-- 검색바 -->
+        <div id="search-bar">
+            <button id="menu-icon">
+                <img class="vector" src="./img/menu_icon.png" alt="Menu Icon" />
+            </button>
+        </div>
+
+        <!-- 하단 버튼 -->
+        <button class="tracking_button">
+            <img class="vector" src="./img/path_icon.png" alt="Tracking Icon">
+        </button>
+
+        <!-- 경로 컨테이너 -->
+        <div class="path_container">
+            <!-- 헤더 -->
+            <div class="header">
+                <div class="title">경로측정</div>
+                <button class="close_button">
+                    <img class="vector" src="./img/close_icon.png" alt="Close Button">
+                </button>
+            </div>
+            <!-- 사용자 컴포넌트 -->
+            <div class="user_container">
+                <div class="user-profile">
+                    <div class="user-name">user1</div>
+                    <div class="ellipse"></div>
+                    <button class="status-button status-btn">시작</button>
+                </div>
+            
+                <div class="user-profile">
+                    <div class="user-name">user2</div>
+                    <div class="ellipse"></div>
+                    <button class="status-button status-btn">시작</button>
+                </div>
+            
+                <div class="user-profile">
+                    <div class="user-name">user3</div>
+                    <div class="ellipse"></div>
+                    <button class="status-button status-btn">시작</button>
+                </div>
+            
+                <div class="user-profile">
+                    <div class="user-name">user4</div>
+                    <div class="ellipse"></div>
+                    <button class="status-button status-btn">시작</button>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-name">user5</div>
+                    <div class="ellipse"></div>
+                    <button class="status-button status-btn">시작</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/js/map.js"></script>
+    <script src="../static/js/status_btn.js"></script>
+</body>
+</html>

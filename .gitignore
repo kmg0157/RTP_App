@@ -1,4 +1,6 @@
 *.pem
 *.pth
 
+wedrive/
+
 IF/output_folder/
