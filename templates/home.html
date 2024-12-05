@@ -37,51 +37,39 @@
             <!-- 사용자 컴포넌트 -->
             <div class="user_container">
                 <div class="user-profile">
+                    <div class="user-name">user1</div>
                     <div class="ellipse"></div>
-                    <div class="user-name">김철수</div>
-                    <button class="status-button">시작</button>
+                    <button class="status-button status-btn">시작</button>
                 </div>
             
                 <div class="user-profile">
+                    <div class="user-name">user2</div>
                     <div class="ellipse"></div>
-                    <div class="user-name">김철수</div>
-                    <button class="status-button">시작</button>
+                    <button class="status-button status-btn">시작</button>
                 </div>
             
                 <div class="user-profile">
+                    <div class="user-name">user3</div>
                     <div class="ellipse"></div>
-                    <div class="user-name">김철수</div>
-                    <button class="status-button">시작</button>
+                    <button class="status-button status-btn">시작</button>
                 </div>
             
                 <div class="user-profile">
+                    <div class="user-name">user4</div>
                     <div class="ellipse"></div>
-                    <div class="user-name">김철수</div>
-                    <button class="status-button">시작</button>
+                    <button class="status-button status-btn">시작</button>
+                </div>
+
+                <div class="user-profile">
+                    <div class="user-name">user5</div>
+                    <div class="ellipse"></div>
+                    <button class="status-button status-btn">시작</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // 카카오맵 초기화
-        
-        function initMap() {
-            const container = document.getElementById('map'); // 지도를 표시할 div
-            const options = {
-                center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울 중심 좌표
-                level: 3 // 지도의 확대 레벨
-            };
-
-            const map = new kakao.maps.Map(container, options); // 지도 생성
-            // 지도 크기 설정 (화면 크기에 맞추기)
-            container.style.width = "100%";
-            container.style.height = "100vh";  // 높이를 화면 크기에 맞게 설정
-        }
-        
-
-        // 페이지 로드 후 맵 초기화
-        window.onload = initMap;
-    </script>
+    <script src="../static/js/map.js"></script>
+    <script src="../static/js/status_btn.js"></script>
 </body>
 </html>
