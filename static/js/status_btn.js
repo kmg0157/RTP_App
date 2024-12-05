@@ -1,40 +1,114 @@
-//  // 버튼 클릭 이벤트 처리
-//         // 모든 status-btn 버튼에 대해 이벤트 리스너를 추가
-//         document.querySelectorAll('.status-btn').forEach(button => {
-//             button.addEventListener('click', function() {
-//                 var isActive = button.classList.contains('active');
-                
-//                 // 버튼 상태에 따른 텍스트 변경
-//                 if (isActive) {
-//                     button.textContent = '시작';  // 상태가 초록색이면 "시작"으로 변경
-//                 } else {
-//                     button.textContent = '측정중'; // 상태가 빨간색이면 "측정중"으로 변경
-//                 }
+let pathLine = [];  // 경로를 저장할 배열
+let currentIndex = 0;  // 현재 그릴 경로의 인덱스
+let pathData = [];  // CSV에서 읽은 경로 데이터 저장
+let colorCache = [];  // 각 위치의 채도를 저장할 배열
+
+// 버튼 클릭 이벤트 처리
+document.querySelectorAll('.status-button').forEach(button => {
+    button.addEventListener('click', function() {
+        var isActive = button.classList.contains('active');
+        
+        // 버튼 상태에 따른 텍스트 변경
+        if (isActive) {
+            button.textContent = '시작';  // 상태가 초록색이면 "시작"으로 변경
+            // '시작' 상태일 때 경로를 삭제
+            pathLine.forEach(line => line.setMap(null));  // 모든 경로 세그먼트를 지도에서 삭제
+            pathLine = [];  // 경로 객체 초기화
+            currentIndex = 0;  // 인덱스 초기화
+        } else {
+            button.textContent = '측정중'; // 상태가 빨간색이면 "측정중"으로 변경
+            // '측정중' 상태일 때 경로를 그리기
+            loadCSV('path.csv').then(path => {
+                pathData = path;  // CSV 데이터를 pathData에 저장
+                currentIndex = 0;  // 경로 인덱스 초기화
+                pathLine = [];  // 경로 배열 초기화
+                colorCache = [];  // 채도 캐시 초기화
+                drawNextPath();  // 첫 번째 경로 그리기
+            }).catch(error => {
+                console.error('CSV 로드 실패:', error);  // 에러 처리
+            });
+        }
     
-//                 // 상태 토글: active 클래스를 추가하거나 제거
-//                 button.classList.toggle('active');
+        // active 클래스 토글
+        button.classList.toggle('active');
     
-//                 // 백엔드로 상태 정보 보내기 (AJAX 사용 예시)
-//                 sendStatusToBackend(button.textContent === '측정중');
-//             });
-//         });
-    
-//         // AJAX 요청을 보내는 함수
-//         function sendStatusToBackend(status) {
-//             fetch('/api/status', {  // 예시 URL, 실제 URL로 변경해야 합니다.
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//                 body: JSON.stringify({
-//                     status: status,  // true(측정중) or false(시작)
-//                 }),
-//             })
-//             .then(response => response.json())
-//             .then(data => {
-//                 console.log('서버 응답:', data);
-//             })
-//             .catch(error => {
-//                 console.error('오류:', error);
-//             });
-//         }
+        // 상태 정보 보내기
+        sendStatusToBackend(button.textContent === '측정중');
+    });
+});
+
+// 경로 색상 채도 계산 함수
+function getColorByAge(index) {
+    const saturation = 0 + (index);  // 채도는 5씩 감소
+    const color = `hsl(120, ${Math.max(saturation, 0)}%, 50%)`;  // 색상 반환
+    return color;
+}
+
+// 경로 그리기 함수 (각 위치마다 1초마다 경로를 추가하고 채도 업데이트)
+function drawNextPath() {
+    if (currentIndex < pathData.length) {
+        // 경로를 그리기
+        const latLng = pathData[currentIndex];
+        const nextLatLng = (currentIndex + 1 < pathData.length) ? pathData[currentIndex + 1] : null;
+
+        const color = getColorByAge(currentIndex);  // 색상 계산
+        const segment = new kakao.maps.Polyline({
+            path: [latLng, nextLatLng].filter(Boolean),  // 두 점을 연결
+            strokeWeight: 10,
+            strokeColor: color,
+            strokeOpacity: 1,
+            strokeStyle: 'solid'
+        });
+
+        pathLine.push(segment);  // 경로 배열에 추가
+        segment.setMap(map);  // 경로를 지도에 표시
+        console.log(segment)
+
+        // 이전 경로의 색상 채도를 업데이트
+        pathLine.forEach((line, index) => {
+            const newColor = getColorByAge(index);  // 색상 업데이트
+            line.setOptions({ strokeColor: newColor });  // 색상 변경
+        });
+
+        currentIndex++;  // 다음 경로로 이동
+        setTimeout(drawNextPath, 1000);  // 1초 후 경로 그리기
+    }
+}
+
+
+// CSV 파일을 불러오는 함수
+function loadCSV(url) {
+    return fetch(url)
+        .then(response => response.text())
+        .then(csv => {
+            const lines = csv.split("\n");
+            const path = [];
+            for (let i = 1; i < lines.length; i++) {
+                const [lat, lng] = lines[i].split(',');
+                if (lat && lng) {
+                    path.push(new kakao.maps.LatLng(parseFloat(lat), parseFloat(lng)));
+                }
+            }
+            return path;
+        });
+}
+
+// 상태를 서버로 전송하는 함수 (예시)
+function sendStatusToBackend(status) {
+    fetch('/api/status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            status: status,  // true(측정중) or false(시작)
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('서버 응답:', data);
+    })
+    .catch(error => {
+        console.error('오류:', error);
+    });
+}
