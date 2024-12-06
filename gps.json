@@ -1,0 +1,56 @@
+[{
+    "Sequence": 1,
+    "Timestamp": "n/a",
+    "Latitude": "n/a",
+    "Longitude": "n/a",
+    "Altitude": "n/a"
+},
+{
+    "Sequence": 2,
+    "Timestamp": "n/a",
+    "Latitude": "n/a",
+    "Longitude": "n/a",
+    "Altitude": "n/a"
+},
+{
+    "Sequence": 3,
+    "Timestamp": "2024-12-06T05:43:30.000Z",
+    "Latitude": 36.624005,
+    "Longitude": 127.457458333,
+    "Altitude": 92.3
+},
+{
+    "Sequence": 4,
+    "Timestamp": "2024-12-06T05:43:33.000Z",
+    "Latitude": 36.624001667,
+    "Longitude": 127.457396667,
+    "Altitude": 92.4
+},
+{
+    "Sequence": 5,
+    "Timestamp": "2024-12-06T05:43:36.000Z",
+    "Latitude": 36.624006667,
+    "Longitude": 127.457355,
+    "Altitude": 92.4
+},
+{
+    "Sequence": 6,
+    "Timestamp": "2024-12-06T05:43:36.000Z",
+    "Latitude": 36.624006667,
+    "Longitude": 127.457355,
+    "Altitude": 92.4
+},
+{
+    "Sequence": 7,
+    "Timestamp": "2024-12-06T05:43:42.000Z",
+    "Latitude": 36.623995,
+    "Longitude": 127.457333333,
+    "Altitude": 92.2
+},
+{
+    "Sequence": 8,
+    "Timestamp": "2024-12-06T05:43:45.000Z",
+    "Latitude": 36.623995,
+    "Longitude": 127.457328333,
+    "Altitude": 92.2
+}]

@@ -1,27 +1,29 @@
-from inference import BertModelInference
+from TCP_server import Server
+from json_file import write_json
 
-# 초기화
-model_path = 'bert_model.pth'
-label_classes = ['N', 'AN']  # 학습 데이터에서 사용한 클래스
-bert_inference = BertModelInference(model_path=model_path, label_classes=label_classes)
+def main():
+    TCP_server = Server()   #서버 소켓 객체 생성
+    write_data=write_json() #json 파일 객체 생성
 
-# 예시 데이터
-example_data = [    
-    "KECABBAB KECABBAA KECABBAB", # N  
-    "KECABBCD KECABBCB KECABADB KECABADD KECABADC KECABACD KECABACC KECABCAA KECABCAB KECABCBA KECADADD KECCBAAC KECCBACA KECCBACD",  # N
-    "JEADBDDC JEBCCCDC", # AN            
-    "KECABBAB KECABBAA", # N
-    "IGACABBC IGACABAD", # AN
-    "KECABBAB KECABBAA HGFEDCBA IJKLMNOP", # N + 가짜(X)
-    "KFBABDDA KFBABDBA", # AN
-    "ABCDEFGH IJKLMNOP", # 가짜
-    "ABCDEFGH IJKLMNOP GJDAADCD", # 가짜 + AN
-    "ABCDEFGH IJKLMNOP KECABBAA",
-    "GJDAADCD", # AN
-    "KECABBAA" # N
-]
+    write_data.open_file()    #json 파일 열기
+    TCP_server.start_server()   #서버 소켓 생성
+    TCP_server.accept_socket()  #클라이언트와 연결 수립
 
-# 추론 수행
-int_labels, decoded_labels = bert_inference.predict(example_data)
+    try:
+        while True:        
+            data = TCP_server.client_socket.recv(1024)  #클라이언트로부터 최대 1024bytes 데이터 받기
+            if data:
+                decoded_data = data.decode('utf-8') #데이터 디코딩
+                print(decoded_data) # 전달 받은 데이터 출력
+                if decoded_data=="CLOSE":   #클라이언트 종료 문자열 수신 시
+                    break
+                else:
+                    write_data.save_data(decoded_data)  #전달받은 데이터 json 파일에 작성
 
-print("Decoded Labels:", decoded_labels)  # 디코딩된 레이블
+    finally: 
+        write_data.close_file() #json 파일 닫기
+        TCP_server.client_socket.close()    #클라이언트 소켓 종료
+        TCP_server.server_socket.close()    #서버 소켓 종료
+
+if __name__ == "__main__":
+    main()
