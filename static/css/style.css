@@ -1,11 +1,228 @@
+/* 전체 화면 중앙 정렬 */
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    width:100vw;
+    height: 100vh;
+
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
+#main-screen {
+    width:100vw;
+    height: 100vh;
+}
+
+
+/* map */
+    #map {
+        position: absolute; 
+        left: 50%;
+        top:0%;
+        transform: translate(-50%);
+        width: 100%;
+        height: 100vh;
+    }
+
+/* search_bar */
+    #search-bar {
+        z-index: 1;
+        position: absolute;
+        width: 85%;  
+        height: 5%;
+        left: 50%; /* 부모의 가로 중앙 */
+        top: 10%;  /* 화면 위에서 10% */
+        transform: translateX(-50%); /* x축 기준으로 정확히 가운데 */
+        background: rgba(32, 36, 70, 0.9);
+        border-radius: 20px;
+        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    }
+
+ 
+    #menu-icon {
+        position: absolute; 
+        width: 25px;
+        height: 25px;
+        left: 40px; 
+        top: 50%; 
+        transform: translate(-50%, -50%);  
+        background: none; 
+        border: none;    
+        padding: 0;       
+        cursor: pointer; 
+    }
+
+
+
+/* tracking_button */
+    .tracking_button {
+        z-index: 1;
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        right: 8%;    
+        bottom: 37%; 
+
+        background: rgba(3, 7, 49, 0.9);  /* 배경색 */
+        border-radius: 50%;  /* 원 형태 */
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.4);  /* 그림자 효과 */
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out; /* 부드러운 애니메이션 */
+    }
+
+    .path_icon {
+        width: 26px;
+        height: 24px;
+        object-fit: contain;  /* 이미지 비율 맞추기 */
+    }
+
+/* path_container */
+    .path_container {
+        position: absolute;
+        width: 100%;
+        height: 35%;
+        left: 50%;       /* 부모의 가로 중앙으로 이동 */
+        bottom: 0%;      /* 부모의 아래쪽 끝 */
+        transform: translateX(-50%);
+        background: rgba(3, 7, 49, 0.85);
+        box-shadow: 0px -4px 4px rgba(0, 0, 0, 0.25);
+    }
+    
+    /* header */
+        .header {
+            position: relative;
+            width: 100%;
+            height: 43px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10 25px;
+            top: 20px;
+        }
+        
+        /* title */
+        .title {
+            top:20px;
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 22px;
+            color: #FFFFFF;
+            padding: 0 20px;
+        }
+        
+        /* close_button */
+        .close_button {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* vector */
+        .vector {
+            width: 100%;    
+            height: 100%;  
+            object-fit: cover; 
+        }
+    
+
+    /* user component: 4개의 사용자 프로필을 담는 컨테이너 */
+    /* user_container - 사용자 컴포넌트를 담는 컨테이너 */
+
+
+/* user_container */
+.user_container {
+    display: flex; /* Flexbox 사용 */
+    justify-content: space-evenly; /* 요소들 간에 고르게 간격을 배치 */
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 20px; /* 요소 간 간격 */
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    padding: 40px 10px 0 40px; /* 왼쪽 40px, 오른쪽 10px 여백 설정 */
+    width: 100%; /* 부모의 전체 너비 */
+    height: auto;
+    position: absolute;
+    left: 50%; /* 가로 중앙 배치 */
+    top: 20%; /* 화면 아래쪽에 배치 */
+    transform: translateX(-50%); /* 가로 정중앙 */
+    scroll-behavior: smooth; /* 스크롤 애니메이션 추가 */
+}
+
+@media (max-height: 680px) {
+    .user_container {
+        height: 70%;  /* 높이를 25%로 줄임 */
+        top: 10%;     /* 화면 위에서 10%로 위치 조정 */
+        padding: 20px 10px 0 20px; 
+    }
+}
+
+
+
+/* 초기 스크롤 위치 설정 - 첫 번째 요소 보이기 */
+.user_container::-webkit-scrollbar {
+    display: none; /* 스크롤바 숨기기 (선택 사항) */
+}
+.user_container {
+    scroll-padding-left: 10px; /* 첫 번째 요소와 컨테이너 좌측 간격 설정 */
+}
+
+/* user-profile */
+.user-profile {
+    flex: 0 0 calc(25% - 10px); /* 4개가 최대 보이도록 간격 조정 */
+    max-width: 120px; /* 모바일 화면 기준 너비 제한 */
+    height: auto;
+    display: flex;
+    flex-direction: column; /* 세로 배치 */
+    justify-content: center;
+    align-items: center;
+    gap: 10px; /* 요소 간 간격 */
+}
+
+
+/* 이름 */
+.user-name {
+    font-family: 'Inter', sans-serif;
+    font-size: calc(12px + 0.5vw); /* 반응형 크기 조정 */
+    font-weight: 700;
+    color: #FFFFFF;
+    text-align: center;
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* 원형 프로필 사진 */
+.ellipse {
+    width: calc(40px + 2vw); /* 반응형 크기 조정 */
+    height: calc(40px + 2vw);
+    background: #FFFFFF;
+    border: 2px solid #F4F4F4;
+    border-radius: 50%; /* 원형 유지 */
+}
+
+/* 측정 버튼 */
+/* status 버튼 기본 상태 */
+.status-button {
+    font-family: 'Inter', sans-serif;
+    font-size: calc(10px + 0.3vw); /* 반응형 크기 조정 */
+    color: #FFFFFF;
+    background-color: #dc6860; /* 빨간색 */
+    border: none;
+    border-radius: 10px;
+    padding: 6px 10px;
     cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* 초록색 상태 */
+.status-button.active {
+    background-color: #4CAF50; /* 초록색 */
+    color: #FFFFFF;
 }
