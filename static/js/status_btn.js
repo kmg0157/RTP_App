@@ -11,13 +11,16 @@ document.querySelectorAll('.status-button').forEach(button => {
         if (isActive) {
             button.textContent = '시작';  // 상태가 초록색이면 "시작"으로 변경
             // '시작' 상태일 때 경로를 삭제
+            button.classList.remove('active');
             pathLine.forEach(line => line.setMap(null));  // 모든 경로 세그먼트를 지도에서 삭제
             pathLine = [];  // 경로 객체 초기화
             currentIndex = 0;  // 인덱스 초기화
         } else {
             button.textContent = '측정중'; // 상태가 빨간색이면 "측정중"으로 변경
+            button.classList.add('active');
+            
             // '측정중' 상태일 때 경로를 그리기
-            loadCSV('path.csv').then(path => {
+            loadCSV('static/path.csv').then(path => {
                 pathData = path;  // CSV 데이터를 pathData에 저장
                 currentIndex = 0;  // 경로 인덱스 초기화
                 pathLine = [];  // 경로 배열 초기화
@@ -56,10 +59,6 @@ function drawNextPath() {
 
         pathLine.push(segment);  // 경로 세그먼트 배열에 추가
         segment.setMap(map);  // 지도에 경로 표시
-
-        // 지도 중심, 레벨 변경
-        map.setCenter(latLng);
-        map.setLevel(2);
 
         currentIndex++;  // 다음 경로로 이동
         setTimeout(drawNextPath, 800);  // 1초 후 다음 경로 그리기

@@ -48,7 +48,14 @@ class GPSApp:
 
         @self.app.route('/home', methods=['GET'])
         def home():
-            return render_template('home.html')
+           return render_template('home.html')
+
+        @self.app.route('/api/status', methods=['POST'])
+        def api_status():
+            data=request.get_json()
+            print(data)
+            return jsonify({'status': "True"}) 
+
 
         @self.app.route('/gps', methods=['POST'])
         def receive_gps():
