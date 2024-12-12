@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, url_for
 from flask_cors import CORS
 from user_db import register, init_db, id_check
 import bcrypt
+import os
+from werkzeug.utils import redirect
+
 
 class GPSApp:
     def __init__(self, import_name):
@@ -17,21 +20,10 @@ class GPSApp:
 
     def setup_routes(self):
         """Flask 라우트 정의"""
-        @self.app.route('/')
-        def genesis():
-            return render_template('register.html')  # 클라이언트에 HTML 파일 제공
-        
-        @self.app.route('/index')
-        def home():
-            return render_template('index.html')
 
-        @self.app.route('/gps', methods=['POST'])
-        def receive_gps():
-            data = request.get_json()
-            latitude = data.get('latitude')
-            longitude = data.get('longitude')
-            print(f"Received GPS coordinates: Latitude={latitude}, Longitude={longitude}")
-            return jsonify({'status': 'success', 'latitude': latitude, 'longitude': longitude})
+        @self.app.route('/')
+        def index():
+            return render_template('register.html')  # 초기화면(회원가입 페이지)
         
         @self.app.route('/register',  methods=['POST'])
         def registration():
@@ -48,16 +40,25 @@ class GPSApp:
 
             # 사용자 추가
             if register(id, password_hash, name, user_tel, target_name,target_tel):
-                return jsonify({"message": "회원가입 성공"
-                                , "id":{id}
-                                , "password_hash":{password_hash}
-                                , "name":{name}
-                                , "user_tel":{user_tel}
-                                , "target":{target_name}
-                                , "target_tel":{target_tel}
-                                , "redirect_url": "/index"}), 201
+                session.clear()
+                session['id']=id
+                return jsonify({'success': "회원가입 성공",'redirect': url_for('home')}), 200
             else:
                 return jsonify({"error": "회원가입 실패"}), 500  
+
+        @self.app.route('/home', methods=['GET'])
+        def home():
+            return render_template('home.html')
+
+        @self.app.route('/gps', methods=['POST'])
+        def receive_gps():
+            data = request.get_json()
+            latitude = data.get('latitude')
+            longitude = data.get('longitude')
+            print(f"Received GPS coordinates: Latitude={latitude}, Longitude={longitude}")
+            return jsonify({'status': 'success', 'latitude': latitude, 'longitude': longitude})
+        
+
             
                 
         @self.app.route('/login', methods=['POST'])
@@ -88,4 +89,4 @@ class GPSApp:
 # 애플리케이션 실행
 if __name__ == '__main__':
     gps_app = GPSApp(__name__)
-    gps_app.run()
+    gps_app.run(debug=True)

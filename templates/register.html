@@ -69,6 +69,8 @@
                 if (result.success) {
                     messageElement.style.color = 'lightgreen';
                     messageElement.textContent = '회원가입 성공!';
+                    window.location.href=result.redirect;
+                    
                 } else {
                     messageElement.style.color = 'red';
                     messageElement.textContent = `오류: ${result.message}`;
