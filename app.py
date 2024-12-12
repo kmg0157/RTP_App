@@ -14,7 +14,7 @@ class GPSApp:
         """
         self.app = Flask(import_name)
         self.app.secret_key = 'key'
-        init_db()
+        # init_db() # db
         CORS(self.app)
         self.setup_routes()
 
@@ -24,7 +24,7 @@ class GPSApp:
         @self.app.route('/')
         def index():
             return render_template('register.html')  # 초기화면(회원가입 페이지)
-        
+        '''
         @self.app.route('/register',  methods=['POST'])
         def registration():
             data = request.json
@@ -44,8 +44,9 @@ class GPSApp:
                 session['id']=id
                 return jsonify({'success': "회원가입 성공",'redirect': url_for('home')}), 200
             else:
-                return jsonify({"error": "회원가입 실패"}), 500  
-
+                return jsonify({"error": "회원가입 실패"}), 500
+          
+'''
         @self.app.route('/home', methods=['GET'])
         def home():
            return render_template('home.html')
@@ -67,7 +68,7 @@ class GPSApp:
         
 
             
-                
+        '''
         @self.app.route('/login', methods=['POST'])
         def login():
             data = request.json
@@ -86,7 +87,7 @@ class GPSApp:
             else:
                 return jsonify({"error": "아이디와 패스워드를 확인하시오."}), 401
 
-            
+            '''
 
     def run(self, host='0.0.0.0', port=5000, debug=True):
         """Flask 서버 실행"""

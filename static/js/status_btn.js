@@ -20,11 +20,14 @@ document.querySelectorAll('.status-button').forEach(button => {
             button.classList.add('active');
             
             // '측정중' 상태일 때 경로를 그리기
-            loadCSV('static/path.csv').then(path => {
+            loadCSV('./static/path.csv').then(path => {
                 pathData = path;  // CSV 데이터를 pathData에 저장
                 currentIndex = 0;  // 경로 인덱스 초기화
                 pathLine = [];  // 경로 배열 초기화
                 drawNextPath();  // 첫 번째 경로 그리기
+                // 최초 1번 지도 중심, 레벨 변경
+                map.setCenter(pathData[currentIndex]);
+                map.setLevel(2);
             }).catch(error => {
                 console.error('CSV 로드 실패:', error);  // 에러 처리
             });
@@ -42,9 +45,11 @@ document.querySelectorAll('.status-button').forEach(button => {
 // 경로 그리기 함수 (1초마다 경로를 추가하고 채도 업데이트)
 function drawNextPath() {
     if (currentIndex < pathData.length) {
+        
         // 경로를 그리기
         const latLng = pathData[currentIndex];
         const nextLatLng = (currentIndex + 1 < pathData.length) ? pathData[currentIndex + 1] : null;
+
 
         // 색상 고정
         const color = '#4CAF50';  // 고정된 색상
