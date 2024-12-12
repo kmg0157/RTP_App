@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request, jsonify, session, url_for
 from flask_cors import CORS
-from user_db import register, init_db, id_check
+from user_db import register, init_db
 import bcrypt
-import os
-from werkzeug.utils import redirect
-
+import grid
 
 class GPSApp:
     def __init__(self, import_name):
@@ -52,11 +50,11 @@ class GPSApp:
 
         @self.app.route('/api/status', methods=['POST'])
         def api_status():
-            data=request.get_json()
-            print(data)
+            data=request.get_json()             #status, lat, lng
+            
             return jsonify({'status': "True"}) 
 
-
+        '''
         @self.app.route('/gps', methods=['POST'])
         def receive_gps():
             data = request.get_json()
@@ -64,10 +62,10 @@ class GPSApp:
             longitude = data.get('longitude')
             print(f"Received GPS coordinates: Latitude={latitude}, Longitude={longitude}")
             return jsonify({'status': 'success', 'latitude': latitude, 'longitude': longitude})
-        
+        '''
 
             
-                
+        '''        
         @self.app.route('/login', methods=['POST'])
         def login():
             data = request.json
@@ -85,7 +83,7 @@ class GPSApp:
                 return render_template('index.html')
             else:
                 return jsonify({"error": "아이디와 패스워드를 확인하시오."}), 401
-
+        '''
             
 
     def run(self, host='0.0.0.0', port=5000, debug=True):

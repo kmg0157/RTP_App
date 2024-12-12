@@ -1,6 +1,6 @@
 *.pem
 *.pth
-
+test.py
 wedrive/
-
+__pycache__/
 IF/output_folder/
