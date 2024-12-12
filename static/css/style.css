@@ -206,7 +206,7 @@ body {
 }
 
 /* 측정 버튼 */
-/* status 버튼 기본 상태 */
+/* 가짜 */
 .status-button {
     font-family: 'Inter', sans-serif;
     font-size: calc(10px + 0.3vw); /* 반응형 크기 조정 */
@@ -221,8 +221,25 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* 초록색 상태 */
 .status-button.active {
+    background-color: #4CAF50; /* 초록색 */
+    color: #FFFFFF;
+}
+/* 진짜 */
+#real-status-button {
+    font-family: 'Inter', sans-serif;
+    font-size: calc(10px + 0.3vw); /* 반응형 크기 조정 */
+    color: #FFFFFF;
+    background-color: #dc6860; /* 빨간색 */
+    border: none;
+    border-radius: 10px;
+    padding: 6px 10px;
+    cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    transition: background-color 0.3s, color 0.3s;
+}
+#real-status-button.active {
     background-color: #4CAF50; /* 초록색 */
     color: #FFFFFF;
 }

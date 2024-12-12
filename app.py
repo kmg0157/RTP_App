@@ -55,7 +55,7 @@ class GPSApp:
         def api_status():
             data=request.get_json()
             print(data)
-            return jsonify({'status': "True"}) 
+            return jsonify({'status': "n"}) 
 
 
         @self.app.route('/gps', methods=['POST'])
