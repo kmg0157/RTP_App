@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, jsonify, session, url_for
 from flask_cors import CORS
-from user_db import register, init_db
+from user_db import register, init_user_db
 import bcrypt
-import grid
+import decison_alogorithm
 
 class GPSApp:
     def __init__(self, import_name):
@@ -12,7 +12,7 @@ class GPSApp:
         """
         self.app = Flask(import_name)
         self.app.secret_key = 'key'
-        init_db()
+
         CORS(self.app)
         self.setup_routes()
 
@@ -25,6 +25,7 @@ class GPSApp:
         
         @self.app.route('/register',  methods=['POST'])
         def registration():
+            init_user_db()
             data = request.json
             id = data.get('id')
             passwd = data.get('passwd')
@@ -51,8 +52,15 @@ class GPSApp:
         @self.app.route('/api/status', methods=['POST'])
         def api_status():
             data=request.get_json()             #status, lat, lng
+            lat=data.get('lat')
+            lng=data.get('lng')
             
-            return jsonify({'status': "True"}) 
+            #그리드 결정
+            label=decison_alogorithm.User_Path()
+            result=label.decision(lat, lng)
+            
+            #사용자 경로 누적 리스트
+            return jsonify({'status': result}) 
 
         '''
         @self.app.route('/gps', methods=['POST'])

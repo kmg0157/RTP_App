@@ -20,7 +20,7 @@ class User(Base):
     target_tel=Column(Integer, nullable=False)
 
 #앱 실행 시 테이블 생성하는 초기화 함수
-def init_db():
+def init_user_db():
     Base.metadata.create_all(bind=engine)
 
 #회원가입 함수
