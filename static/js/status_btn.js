@@ -15,7 +15,7 @@ document.querySelectorAll('.status-button').forEach(button => {
 // status 버튼
 document.querySelector('#real-status-button').addEventListener('click', function() {
     var isActive = this.classList.toggle('active'); //버튼 토글
-    sendStatusToBackend(isActive); // 상태 정보 보내기
+    
 
     if (isActive) {// 측정중
         this.textContent = '측정중';
@@ -36,6 +36,7 @@ document.querySelector('#real-status-button').addEventListener('click', function
     } 
     else {// 시작
         this.textContent = '시작';
+        sendStatusToBackend(false,0,0); // 상태 정보 보내기
         isDrawing = false; // 경로 그리기 중지
         pathLine.forEach(line => line.setMap(null)); //지도 지우기
         pathLine = [];  // 경로 객체 초기화
@@ -48,9 +49,12 @@ document.querySelector('#real-status-button').addEventListener('click', function
 function drawNextPath() {
     if (currentIndex < pathData.length && isDrawing) {
         
-        // 경로를 그리기
+        // 위치 변수
         const latLng = pathData[currentIndex];
         const nextLatLng = (currentIndex + 1 < pathData.length) ? pathData[currentIndex + 1] : null;
+
+        //서버에 전송송
+        sendStatusToBackend(true,latLng.La,latLng.Ma);
 
         // 색상 고정
         const color = '#4CAF50';  // 고정된 색상
@@ -89,14 +93,16 @@ function loadCSV(url) {
 }
 
 // 서버 통신
-function sendStatusToBackend(status) {
+function sendStatusToBackend(active,lat,lng) {
     fetch('/api/status', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            status: status,  // true(측정중) or false(시작)
+            status: active,  // true(측정중) or false(시작)
+            lat : lat,
+            lng : lng
         }),
     })
     .then(response => response.json())
