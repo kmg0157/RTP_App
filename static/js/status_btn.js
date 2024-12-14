@@ -92,8 +92,12 @@ function loadCSV(url) {
         });
 }
 
-// 서버 통신
-function sendStatusToBackend(active,lat,lng) {
+
+//서버 통신
+let popupOpened = false; // 팝업이 열렸는지 여부
+let ignorePopupCount = 0; // 이후 무시할 응답 횟수 카운터
+
+function sendStatusToBackend(active, lat, lng) {
     fetch('/api/status', {
         method: 'POST',
         headers: {
@@ -101,15 +105,30 @@ function sendStatusToBackend(active,lat,lng) {
         },
         body: JSON.stringify({
             status: active,  // true(측정중) or false(시작)
-            lat : lat,
-            lng : lng
+            lat: lat,
+            lng: lng
         }),
     })
     .then(response => response.json())
     .then(data => {
-        console.log('서버 응답:', data); // n or an
+        console.log('서버 응답:', data);
+
+        // 팝업 무시 카운터가 남아있으면 카운터를 감소시키고 종료
+        if (ignorePopupCount > 0) {
+            ignorePopupCount--;
+            console.log(`팝업 무시: 남은 카운트 ${ignorePopupCount}`);
+            return;
+        }
+
+        // 상태가 'n'이고 팝업이 아직 안 열렸다면 팝업 열기
+        if (data.status === 'n' && !popupOpened) {
+            popupOpened = true; 
+            openPopup(data.message || "서버 상태가 n 입니다. 계속 진행할까요?");
+        }
     })
     .catch(error => {
         console.error('오류:', error);
     });
 }
+
+
